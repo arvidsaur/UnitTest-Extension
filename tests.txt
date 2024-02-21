@@ -1,0 +1,49 @@
+no-results-yet
+  extensions [unittest]
+  unittest:summary => "UnitTest Run Passed - Total 0, Failed 0, Errors 0, Passed 0"
+
+unittests-are-clearable-but-dont-clear-when-run
+  extensions [unittest]
+  O> unittest:add "" [] [5] 5
+  O> unittest:run
+  unittest:summary => "UnitTest Run Passed - Total 1, Failed 0, Errors 0, Passed 1"
+  O> unittest:run
+  unittest:summary => "UnitTest Run Passed - Total 1, Failed 0, Errors 0, Passed 1"
+  O> unittest:clear
+  O> unittest:run
+  unittest:summary => "UnitTest Run Passed - Total 0, Failed 0, Errors 0, Passed 0"
+
+use-correct-equality-unittesting
+  extensions [unittest]
+  O> unittest:add "equals" [] [turtles with [true]] turtles with [true]
+  O> unittest:run
+  unittest:summary => "UnitTest Run Passed - Total 1, Failed 0, Errors 0, Passed 1"
+
+unittest-fails
+  extensions [unittest]
+  O> unittest:add "" [] [5] 6
+  O> unittest:run
+  unittest:summary => "UnitTest Run Failed - Total 1, Failed 1, Errors 0, Passed 0\nFAIL '' expected: 6 but got: 5"
+
+unittests-succeed
+  extensions [unittest]
+  O> unittest:setup [ ca crt 5 ]
+  O> unittest:add "make" [ crt 7 ] [count turtles] 12
+  O> unittest:add "count" [ ] [count turtles] 5
+  O> unittest:run
+  unittest:summary => "UnitTest Run Passed - Total 2, Failed 0, Errors 0, Passed 2"
+  unittest:details => "UnitTest Run Passed - Total 2, Failed 0, Errors 0, Passed 2\nPASS 'make'\nPASS 'count'"
+
+error-in-command-task-1
+  extensions [unittest]
+  to-report zero report 0 end
+  O> unittest:add "" [ print 1 / zero ] [ count turtles ] 0
+  O> unittest:run
+  unittest:summary => "UnitTest Run Failed - Total 1, Failed 0, Errors 1, Passed 0\nERROR '' Division by zero."
+
+error-in-command-task-2
+  extensions [unittest]
+  to run-unittests unittest:add "" [ print 1 / zero ] [ count turtles ] e unittest:run print unittest:summary end
+  to-report zero report 0 end
+  O> run-unittests
+  unittest:summary => "UnitTest Run Failed - Total 1, Failed 0, Errors 1, Passed 0\nERROR '' Division by zero."
